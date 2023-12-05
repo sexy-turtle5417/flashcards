@@ -6,6 +6,7 @@ import { JwtServiceImpl } from './jwtService/jwtService';
 import { UserServiceImpl } from './user/userService';
 import { UserRepositoryPrismaImpl } from './user/userRepositories';
 import { PrismaClient } from '@prisma/client';
+import { AuthController } from './auth/authControllers';
 
 config();
 
@@ -19,7 +20,11 @@ const userRepository = new UserRepositoryPrismaImpl(new PrismaClient());
 const userService = new UserServiceImpl(userRepository, jwtService);
 const userController = new UserController(app, userService);
 
+
+const authController = new AuthController(app);
+
 app.route("api/v1/user", userController.getRoute());
+app.route("api/v1/auth/", authController.getRoute());
 
 
 serve(app, () => {
