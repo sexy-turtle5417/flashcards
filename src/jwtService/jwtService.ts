@@ -18,8 +18,8 @@ export class JwtServiceImpl implements JwtService{
     }
 
     async verifyRefreshToken(token: string): Promise<JwtPayload | string> {
-        const initialpayload: any = verify(token, this.refreshTokenSecret);
-        const { iat, exp, ...payload } = initialpayload;
+        const initialPayload: any = verify(token, this.refreshTokenSecret);
+        const { iat, exp, ...payload } = initialPayload;
         return payload;
     }
 
