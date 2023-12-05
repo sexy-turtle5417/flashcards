@@ -1,7 +1,14 @@
-import { serve } from '@hono/node-server'
-import { Hono } from 'hono'
+import { serve } from '@hono/node-server';
+import { Hono } from 'hono';
+import { UserController } from './user/userControllers';
+
 
 const app = new Hono()
-app.get('/', (c) => c.text('Hello Hono!'))
+const userController = new UserController(app);
 
-serve(app)
+app.route("api/v1/user", userController.getRoute());
+
+
+serve(app, () => {
+    console.log("server started on port 3000");
+});
