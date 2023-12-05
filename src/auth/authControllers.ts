@@ -2,13 +2,16 @@ import { Context, Hono } from "hono";
 import { LogInDetails } from "./authType";
 import { invalidJsonRequestBodyFilter } from "../lib/universalMiddlewares";
 import { invalidLogInDetailsFilter } from "./authMiddlewares";
+import { AuthService } from "./autServices";
 
 export class AuthController{
 
     private route: Hono;
+    private authServie: AuthService;
 
-    constructor(app: Hono){
+    constructor(app: Hono, authService: AuthService){
         this.route = app;
+        this.authServie = authService;
     }
 
     getRoute(): Hono{

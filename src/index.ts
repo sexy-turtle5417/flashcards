@@ -7,6 +7,7 @@ import { UserServiceImpl } from './user/userService';
 import { UserRepositoryPrismaImpl } from './user/userRepositories';
 import { PrismaClient } from '@prisma/client';
 import { AuthController } from './auth/authControllers';
+import { AuthServiceImpl } from './auth/autServices';
 
 config();
 
@@ -20,12 +21,11 @@ const userRepository = new UserRepositoryPrismaImpl(new PrismaClient());
 const userService = new UserServiceImpl(userRepository, jwtService);
 const userController = new UserController(app, userService);
 
-
-const authController = new AuthController(app);
+const authService = new AuthServiceImpl(userRepository, jwtService);
+const authController = new AuthController(app, authService);
 
 app.route("api/v1/user", userController.getRoute());
 app.route("api/v1/auth/", authController.getRoute());
-
 
 serve(app, () => {
     console.log("server started on port 3000");
