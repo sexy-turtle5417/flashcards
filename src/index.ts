@@ -7,7 +7,7 @@ import { UserServiceImpl } from './user/userService';
 import { UserRepositoryPrismaImpl } from './user/userRepositories';
 import { PrismaClient } from '@prisma/client';
 import { AuthController } from './auth/authControllers';
-import { AuthServiceImpl } from './auth/autServices';
+import { AuthServiceImpl } from './auth/authServices';
 
 config();
 

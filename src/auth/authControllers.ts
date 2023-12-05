@@ -2,7 +2,7 @@ import { Context, Hono } from "hono";
 import { LogInDetails } from "./authType";
 import { invalidJsonRequestBodyFilter } from "../lib/universalMiddlewares";
 import { invalidLogInDetailsFilter } from "./authMiddlewares";
-import { AuthService } from "./autServices";
+import { AuthService } from "./authServices";
 import { IncorrectCredentialsError } from "./authErrors";
 
 export class AuthController{
