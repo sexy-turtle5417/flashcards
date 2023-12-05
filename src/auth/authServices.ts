@@ -5,7 +5,8 @@ import { IncorrectCredentialsError } from "./authErrors";
 import { JwtService } from "../jwtService/jwtService";
 
 export interface AuthService{
-    authenticate(logInDetails: LogInDetails): Promise<AuthResponse>
+    authenticate(logInDetails: LogInDetails): Promise<AuthResponse>;
+    refreshToken(token: string): Promise<AuthResponse>;
 }
 
 export class AuthServiceImpl implements AuthService{
@@ -16,6 +17,14 @@ export class AuthServiceImpl implements AuthService{
     constructor(userRepository: UserRepository, jwtService: JwtService){
         this.userRepository = userRepository;
         this.jwtService = jwtService;
+    }
+
+    async refreshToken(token: string): Promise<AuthResponse> {
+        const payload = await this.jwtService.verifyRefreshToken(token);
+        console.log(payload);
+        const accessToken = await this.jwtService.signAccessToken(payload);
+        const refreshToken = await this.jwtService.signRefreshToken(payload);
+        return { accessToken, refreshToken };
     }
 
     async authenticate(logInDetails: LogInDetails): Promise<AuthResponse> {

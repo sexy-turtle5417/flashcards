@@ -1,8 +1,10 @@
-import { sign } from "jsonwebtoken";
+import { Payload } from "@prisma/client/runtime/library";
+import { JwtPayload, sign, verify } from "jsonwebtoken";
 
 export interface JwtService{
     signAccessToken(payload: string | Object): Promise<string>;
     signRefreshToken(payload: string | Object): Promise<string>;
+    verifyRefreshToken(token: string): Promise<JwtPayload | string>;
 }
 
 export class JwtServiceImpl implements JwtService{
@@ -13,6 +15,12 @@ export class JwtServiceImpl implements JwtService{
     constructor(jwtSecret: string, refreshTokenSecret: string){
         this.jwtSecret = jwtSecret;
         this.refreshTokenSecret = refreshTokenSecret;
+    }
+
+    async verifyRefreshToken(token: string): Promise<JwtPayload | string> {
+        const initialpayload: any = verify(token, this.refreshTokenSecret);
+        const { iat, exp, ...payload } = initialpayload;
+        return payload;
     }
 
     async signAccessToken(payload: string | Object): Promise<string> {
