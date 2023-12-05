@@ -10,11 +10,11 @@ import { PrismaClient } from '@prisma/client';
 config();
 
 const jwtSecretKey = String(process.env.JWT_SECRET_KEY);
-const refreshToken = String(process.env.REFRESH_TOKEN_SECRET_KEY);
+const refreshTokenSecretKey = String(process.env.REFRESH_TOKEN_SECRET_KEY);
 
 
 const app = new Hono()
-const jwtService = new JwtServiceImpl(jwtSecretKey, refreshToken);
+const jwtService = new JwtServiceImpl(jwtSecretKey, refreshTokenSecretKey);
 const userRepository = new UserRepositoryPrismaImpl(new PrismaClient());
 const userService = new UserServiceImpl(userRepository, jwtService);
 const userController = new UserController(app, userService);
