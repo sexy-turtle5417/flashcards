@@ -1,4 +1,4 @@
-import { SignOptions, sign } from "jsonwebtoken";
+import { sign } from "jsonwebtoken";
 
 export interface JwtService{
     signAccessToken(payload: string | Object): Promise<string>;
