@@ -3,6 +3,7 @@ import { LogInDetails } from "./authType";
 import { invalidJsonRequestBodyFilter } from "../lib/universalMiddlewares";
 import { invalidLogInDetailsFilter } from "./authMiddlewares";
 import { AuthService } from "./autServices";
+import { IncorrectCredentialsError } from "./authErrors";
 
 export class AuthController{
 
@@ -20,9 +21,20 @@ export class AuthController{
         this.route.use("/login", invalidLogInDetailsFilter);
 
         this.route.post("/login", async (c: Context) => {
-            const logInDetails: LogInDetails = await c.req.json();
-            c.status(201);
-            return c.json(logInDetails);
+            try{
+                const logInDetails: LogInDetails = await c.req.json();
+                const tokens = await this.authServie.authenticate(logInDetails);
+                c.status(201);
+                return c.json(tokens);
+            }
+            catch(error){
+                c.status(403)
+                if(error instanceof IncorrectCredentialsError)
+                    return c.json({ message: error.message });
+                console.error(error);
+                c.status(500);
+                return c.json({ message: "server error" });
+            }
         });
 
 
