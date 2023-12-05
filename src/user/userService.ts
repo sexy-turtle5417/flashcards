@@ -1,3 +1,4 @@
+import { hash } from "bcrypt";
 import { AuthResponse } from "../auth/authType";
 import { JwtService } from "../jwtService/jwtService";
 import { UserRepository } from "./userRepositories";
@@ -20,6 +21,7 @@ export class UserServiceImpl implements UserService{
     }
 
     async register(registrationData: UserRegistrationData): Promise<AuthResponse> {
+        registrationData.password = await hash(registrationData.password, 10);
         const user = await this.userRepository.save(registrationData);
         const { password, ...payload } = user;
         const accessToken = await this.jwtService.signAccessToken(payload);
